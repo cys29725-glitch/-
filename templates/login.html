@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazing - 登录</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary-color: #8b5cf6;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --border-radius: 8px;
+            --transition: all 0.2s ease-in-out;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-primary);
+        }
+        
+        .container {
+            background: var(--bg-primary);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            animation: float 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10%, -10%) rotate(5deg); }
+            50% { transform: translate(0, 10%) rotate(0deg); }
+            75% { transform: translate(-10%, -5%) rotate(-5deg); }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--bg-primary);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .form-group input.error {
+            border-color: var(--error-color);
+        }
+        
+        .form-group input.success {
+            border-color: var(--success-color);
+        }
+        
+        .validation-message {
+            font-size: 0.875rem;
+            margin-top: 5px;
+            min-height: 20px;
+        }
+        
+        .validation-message.error {
+            color: var(--error-color);
+        }
+        
+        .validation-message.success {
+            color: var(--success-color);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(45deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--transition);
+            z-index: -1;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow);
+        }
+        
+        .btn:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn:disabled::before {
+            display: none;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-primary);
+            padding: 16px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--error-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Amazing</div>
+            <div class="subtitle">多人在线聊天应用</div>
+        </div>
+        
+        <form id="login-form" onsubmit="return handleLogin(event)">
+            <div class="form-group">
+                <label for="username">昵称</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    placeholder="请输入您的昵称" 
+                    required
+                    minlength="2"
+                    maxlength="20"
+                >
+                <div id="username-validation" class="validation-message"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="server">服务器</label>
+                <select id="server" required>
+                    {% for server in servers %}
+                    <option value="{{ server.url }}">{{ server.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button type="submit" id="login-btn" class="btn">
+                <span id="btn-text">登录</span>
+                <span id="btn-loading" class="loading" style="display: none;"></span>
+            </button>
+        </form>
+    </div>
+    
+    <div id="toast" class="toast">
+        <span id="toast-message"></span>
+    </div>
+    
+    <script>
+        const usernameInput = document.getElementById('username');
+        const usernameValidation = document.getElementById('username-validation');
+        const loginBtn = document.getElementById('login-btn');
+        const btnText = document.getElementById('btn-text');
+        const btnLoading = document.getElementById('btn-loading');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        
+        // 显示提示框
+        function showToast(message, type = 'error') {
+            toastMessage.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // 验证昵称唯一性
+        async function validateUsername(username) {
+            if (!username.trim()) {
+                usernameInput.classList.add('error');
+                usernameInput.classList.remove('success');
+                usernameValidation.textContent = '昵称不能为空';
+                usernameValidation.className = 'validation-message error';
+                return false;
+            }
+            
+            try {
+                const response = await fetch(`/check_username?username=${encodeURIComponent(username)}`);
+                const data = await response.json();
+                
+                if (data.taken) {
+                    usernameInput.classList.add('error');
+                    usernameInput.classList.remove('success');
+                    usernameValidation.textContent = '该昵称已被使用';
+                    usernameValidation.className = 'validation-message error';
+                    return false;
+                } else {
+                    usernameInput.classList.remove('error');
+                    usernameInput.classList.add('success');
+                    usernameValidation.textContent = '昵称可用';
+                    usernameValidation.className = 'validation-message success';
+                    return true;
+                }
+            } catch (error) {
+                console.error('验证失败:', error);
+                usernameInput.classList.add('error');
+                usernameInput.classList.remove('success');
+                usernameValidation.textContent = '验证失败，请重试';
+                usernameValidation.className = 'validation-message error';
+                return false;
+            }
+        }
+        
+        // 实时验证昵称
+        let debounceTimer;
+        usernameInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const username = usernameInput.value.trim();
+                if (username.length >= 2) {
+                    validateUsername(username);
+                } else {
+                    usernameInput.classList.remove('error', 'success');
+                    usernameValidation.textContent = '';
+                }
+            }, 500);
+        });
+        
+        // 处理登录
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = usernameInput.value.trim();
+            const server = document.getElementById('server').value;
+            
+            // 基本验证
+            if (username.length < 2) {
+                showToast('昵称至少需要2个字符');
+                return false;
+            }
+            
+            // 验证昵称唯一性
+            const isUsernameValid = await validateUsername(username);
+            if (!isUsernameValid) {
+                return false;
+            }
+            
+            // 显示加载状态
+            loginBtn.disabled = true;
+            btnText.textContent = '登录中';
+            btnLoading.style.display = 'inline-block';
+            
+            try {
+                // 模拟登录延迟
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // 跳转到聊天页面
+                window.location.href = `/chat?username=${encodeURIComponent(username)}&server=${encodeURIComponent(server)}`;
+            } catch (error) {
+                console.error('登录失败:', error);
+                showToast('登录失败，请重试');
+                
+                // 恢复按钮状态
+                loginBtn.disabled = false;
+                btnText.textContent = '登录';
+                btnLoading.style.display = 'none';
+            }
+        }
+        
+        // 页面加载时的动画效果
+        window.addEventListener('load', () => {
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            container.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            
+            setTimeout(() => {
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
